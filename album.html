@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C & E - Lienzo de Memorias</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=IM+Fell+English&display=swap" rel="stylesheet">
+</head>
+<body class="album-frame-body">
+
+  <button onclick="window.location.href='index.html'" class="back-btn-frame">
+    ←
+  </button>
+
+  <main class="scene-container">
+    <img src="assets/images/bg/album_bg.png" class="scene-bg" alt="Pared con marco">
+    
+    <div class="canvas-area" id="canvas-area">
+      <div class="masonry-grid" id="album-grid">
+        </div>
+    </div>
+  </main>
+
+  <div id="vault-modal" class="modal-overlay hidden">
+    <div class="vault-box">
+      <div class="vault-icon">🔒</div>
+      <h3>Contraseña Requerida</h3>
+      <p>Este recuerdo está protegido.</p>
+      <input type="password" id="vault-password" maxlength="6" placeholder="******" />
+      <div class="vault-actions">
+        <button onclick="closeVaultModal()">Cancelar</button>
+        <button onclick="unlockMedia()" class="unlock-btn">Desbloquear</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="lightbox-modal" class="modal-overlay hidden" onclick="closeLightbox(event)">
+    <div class="lightbox-content">
+      <button class="close-lightbox" onclick="closeLightbox(event, true)">✕</button>
+      <div id="lightbox-media-container">
+        </div>
+      <p id="lightbox-caption" class="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+  
+  <script src="album.js"></script>
+</body>
+</html>

@@ -1,0 +1,1333 @@
+/* ═══════════════════════════════════════════════════════════
+   C & E — Stylesheet
+═══════════════════════════════════════════════════════════ */
+
+:root {
+  --cream:      #f5ede0;
+  --parchment:  #ede0cc;
+  --warm-brown: #7a5c3e;
+  --dark-brown: #3b2a1a;
+  --gold:       #c9a96e;
+  --gold-light: #e2c99a;
+  --ink:        #2c2118;
+  --blush:      #d4a89a;
+  --text-main:  #3b2a1a;
+  --text-soft:  #7a6555;
+  --overlay:    rgba(10, 6, 3, 0.72);
+
+  --font-display: 'Daydream', sans-serif; /* Títulos grandes, monograma y números */
+  --font-body:    'Dico', sans-serif;     /* Interfaz, botones, tooltips y fechas */
+  --font-text:    'Dogica', sans-serif;
+
+  --ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #0d0907;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ══════════════════════════ FUENTES ══════════════════════════ */
+@font-face {
+  font-family: 'Daydream';
+  src: url('/assets/fonts/Daydream\ DEMO.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Dogica';
+  src: url('/assets/fonts/dogica.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Dico';
+  src: url('/assets/fonts/Dico.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+/* ══════════════════════════ LOGIN ══════════════════════════ */
+#login-screen {
+  position: fixed;
+  inset: 0;
+  background: #0d0907;
+  z-index: 500; /* Por encima de todo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1s var(--ease-soft);
+}
+
+.login-box {
+  background: var(--cream);
+  padding: 3rem;
+  border-radius: 4px;
+  border: 1px solid var(--gold);
+  text-align: center;
+  width: min(400px, 90vw);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--text-soft);
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--dark-brown);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.login-input:focus {
+  border-color: var(--gold);
+}
+
+/* ══════════════════════════ INTRO ══════════════════════════ */
+
+#intro-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0d0907;
+  z-index: 100;
+  transition: opacity 1.2s var(--ease-soft);
+}
+
+#intro-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#intro-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#intro-particles::before,
+#intro-particles::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+}
+
+#intro-particles::before {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #c9a96e 0%, transparent 70%);
+  top: -100px; left: -100px;
+  animation: drift1 14s ease-in-out infinite alternate;
+}
+
+#intro-particles::after {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #d4a89a 0%, transparent 70%);
+  bottom: -80px; right: -80px;
+  animation: drift2 18s ease-in-out infinite alternate;
+}
+
+@keyframes drift1 { to { transform: translate(120px, 80px); } }
+@keyframes drift2 { to { transform: translate(-100px, -60px); } }
+
+#intro-content {
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.8rem;
+  padding: 2rem;
+}
+
+#intro-monogram {
+  font-family: var(--font-body);
+  font-size: clamp(7rem, 5vw, 6rem);
+  color: var(--gold);
+  text-shadow: 4px 4px 0px var(--dark-brown); 
+  opacity: 0;
+  animation: fadeDrop 1.2s var(--ease-soft) 0.3s forwards;
+}
+
+#letter-reveal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 480px;
+}
+
+.letter-line {
+  font-family: var(--font-body);
+  font-size: clamp(0.75rem, 1.8vw, 0.95rem); 
+  color: var(--cream);
+  opacity: 0;
+  animation: fadeDrop 2s var(--ease-soft) var(--d) forwards;
+  line-height: 1.8;
+  letter-spacing: 0.05em; 
+}
+
+@keyframes fadeDrop {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#enter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1.8rem;
+  background: var(--dark-brown); /* Fondo sólido */
+  border: 2px solid var(--gold); /* Borde grueso */
+  color: var(--gold-light);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  cursor: pointer;
+  opacity: 0;
+  animation: fadeDrop 0.9s var(--ease-soft) 2.5s forwards;
+  transition: transform 0.1s, background 0.2s;
+  box-shadow: 4px 4px 0px rgba(201, 169, 110, 0.3); /* Sombra dura de bloque */
+}
+
+#enter-btn:hover {
+  background: var(--ink);
+  color: var(--gold);
+}
+
+#enter-btn:active {
+  transform: translate(2px, 2px); /* Efecto de presionar un botón físico */
+  box-shadow: 2px 2px 0px rgba(201, 169, 110, 0.3);
+}
+
+/* ══════════════════════════ ROOM ══════════════════════════ */
+
+#room-screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  opacity: 0;
+  transition: opacity 1.4s var(--ease-soft);
+}
+
+#room-screen.visible  { display: block; }
+#room-screen.faded-in { opacity: 1; }
+
+#room-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: url('C_E_room_Day.png');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Si usas <img> o <video> como fondo */
+#room-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ══════════════════════════ ZONAS ══════════════════════════ */
+
+.zone {
+  position: absolute;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.zone:hover {
+  background: rgba(255, 245, 220, 0.08);
+  outline: 1px solid rgba(255, 245, 200, 0.12);
+}
+
+#zone-tooltip {
+  position: fixed;
+  background: rgba(28, 18, 10, 0.88);
+  color: var(--gold-light);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.9rem;
+  border-radius: 2px;
+  border: 1px solid rgba(201,169,110,0.25);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s, transform 0.25s;
+  z-index: 50;
+  white-space: nowrap;
+}
+
+#zone-tooltip.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ══════════════════════════ OVERLAY ══════════════════════════ */
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-soft);
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ══════════════════════════ MODALES ══════════════════════════ */
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -44%) scale(0.97);
+  width: min(520px, 92vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--cream);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(201,169,110,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(212,168,154,0.08) 0%, transparent 60%);
+  border: 1px solid rgba(122,92,62,0.2);
+  border-radius: 4px;
+  padding: 2.8rem 2.6rem;
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-soft), transform 0.4s var(--ease-soft);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122,92,62,0.3) transparent;
+}
+
+.modal.modal-wide { width: min(640px, 94vw); }
+
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem; right: 1.2rem;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  padding: 0.3rem 0.5rem;
+}
+
+.modal-close:hover { opacity: 1; }
+
+.modal-inner { text-align: center; }
+
+.modal-ornament {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+  display: block;
+}
+
+.modal-title {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3.5vw, 2.9rem);
+  color: var(--dark-brown);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.02em;
+}
+
+.modal-subtitle {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  margin-bottom: 1.6rem;
+  letter-spacing: 0.05em;
+}
+
+.modal-note {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-soft);
+  margin-top: 2rem;
+  line-height: 1.7;
+}
+
+/* ══════════════════════════ CONTADOR ══════════════════════════ */
+
+.counter-label-title {
+  font-family: var(--font-body);
+  font-size: 1.5rem; 
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.8rem;
+  opacity: 0.85;
+}
+
+#counter-full {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-size: clamp(1rem, 2.5vw, 1rem);
+  color: var(--dark-brown);
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.2rem; /* Le di un poco más de aire por debajo */
+  min-height: 2rem;
+}
+
+.modal-desc {
+  font-family: var(--font-body);
+  font-size: 0.85rem; 
+  color: var(--text-soft);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ══════════════════════════ CARTAS (NUEVO DISEÑO) ══════════════════════════ */
+
+#letters-container {
+  position: relative;
+  min-height: 300px; /* Evita que el modal cambie bruscamente de tamaño */
+}
+
+/* --- VISTA 1: LA LISTA (EL BUZÓN) --- */
+#letters-list-view {
+  transition: opacity 0.3s var(--ease-soft);
+}
+
+#letters-list-view.hidden {
+  display: none;
+}
+
+.pixel-list {
+  list-style: none;
+  margin-top: 1.5rem;
+  padding: 0;
+  text-align: left;
+}
+
+.letter-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem 0.8rem;
+  border-bottom: 2px dashed rgba(122,92,62,0.15); /* Borde punteado lofi */
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.letter-item:hover {
+  background: rgba(122,92,62,0.08);
+  transform: translateX(4px); /* Pequeño empujón al pasar el mouse */
+}
+
+/* El indicador de carta nueva/leída */
+.status-icon {
+  font-family: var(--font-display); /* Daydream */
+  font-size: 1.2rem;
+  min-width: 24px;
+  text-align: center;
+}
+
+.letter-item.unread .status-icon {
+  color: var(--blush); /* Un tono rosado/cálido para las nuevas */
+  animation: pulse 2s infinite; /* Un parpadeo muy suave y lento */
+}
+
+.letter-item.read .status-icon {
+  color: var(--text-soft);
+  opacity: 0.4;
+}
+
+.letter-title {
+  font-family: var(--font-body); /* Dico */
+  font-size: 0.95rem;
+  color: var(--dark-brown);
+  flex: 1;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* --- VISTA 2: LA CARTA FÍSICA --- */
+#single-letter-view {
+  text-align: left;
+}
+
+#single-letter-view.hidden {
+  display: none;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.back-btn:hover {
+  color: var(--dark-brown);
+}
+
+/* El efecto visual del papel físico */
+.paper-sheet {
+  background: var(--parchment);
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(122,92,62,0.2);
+  box-shadow: 4px 4px 0px rgba(122,92,62,0.1);
+  transform-origin: top center;
+  
+  /* Lo mantenemos invisible y aplastado por defecto */
+  transform: scaleY(0); 
+  opacity: 0;
+}
+
+/* ESTE ES EL GATILLO: La animación solo ocurre si tiene la clase .is-open */
+.paper-sheet.is-open {
+  animation: unfoldPaper 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Animación de desdoblar hacia abajo */
+@keyframes unfoldPaper {
+  0% { transform: scaleY(0); opacity: 0; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+
+@keyframes fadeInText {
+  to { opacity: 1; }
+}
+
+/* --- EL TEXTO DE LA CARTA --- */
+.letter-text {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text-main);
+  opacity: 0;
+  animation: fadeInText 0.4s ease forwards 0.35s; 
+}
+
+.letter-text h3 {
+  font-size: 1.4rem;
+  font-weight: 600; 
+  color: var(--warm-brown);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  letter-spacing: normal;
+  text-shadow: none;
+}
+
+.letter-text p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 1.4rem;
+  font-style: normal;
+}
+
+.letter-text .letter-sign {
+  display: block;
+  margin-top: 3rem;
+  text-align: right;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--warm-brown);
+  font-weight: 500;
+}
+
+/* ══════════════════════════ DIARIO ══════════════════════════ */
+
+.diary-book {
+  display: flex;
+  background: var(--parchment);
+  border: 1px solid rgba(122,92,62,0.2);
+  box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
+  margin-top: 1.5rem;
+  position: relative;
+  min-height: 400px;
+}
+
+.diary-page {
+  flex: 1;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Las iniciales C y E arriba */
+.page-header {
+  font-family: var(--font-display); 
+  font-size: 2rem;
+  color: var(--gold);
+  text-align: center;
+  border-bottom: 2px solid rgba(201,169,110,0.2);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.book-spine {
+  width: 2px;
+  background: rgba(122,92,62,0.15);
+  box-shadow: inset 1px 0 2px rgba(0,0,0,0.05);
+}
+
+/* Scroll oculto para que parezca papel real y no una web */
+.diary-entries {
+  text-align: left;
+  max-height: 350px;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+}
+.diary-entries::-webkit-scrollbar { 
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.diary-entry {
+  margin-bottom: 1.8rem;
+  padding-bottom: 0.5rem;
+}
+
+.diary-date {
+  display: block;
+  font-family: var(--font-body); 
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+
+.diary-text {
+  /* Fuente real y legible (Rompemos la 4ta pared) */
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-main);
+  font-style: normal;
+}
+
+/* Zona de Escritura */
+#diary-compose-zone {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#diary-textarea {
+  width: 100%;
+  height: 80px;
+  background: var(--cream);
+  border: 2px solid var(--parchment);
+  padding: 1rem;
+  font-family: system-ui, sans-serif;
+  resize: none;
+  outline: none;
+}
+
+#diary-textarea:focus {
+  border-color: var(--gold);
+}
+
+/* Controles de los botones (Alineados a la derecha) */
+.diary-controls {
+  display: flex;
+  justify-content: flex-end; 
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+#current-author-btn {
+  padding: 0.6rem 1rem;
+  background: var(--parchment);
+  border: 2px solid var(--gold);
+  color: var(--dark-brown);
+  font-family: var(--font-display); 
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#current-author-btn:hover {
+  background: var(--gold-light);
+}
+
+#save-diary-btn {
+  padding: 0.6rem 1.5rem;
+  background: var(--dark-brown);
+  color: var(--gold-light);
+  font-family: var(--font-body);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#save-diary-btn:hover {
+  background: var(--ink);
+}
+
+/* Responsivo: En móvil el libro se "cierra" y se pone una página arriba de la otra */
+@media (max-width: 640px) {
+  .diary-book {
+    flex-direction: column;
+  }
+  .book-spine {
+    width: 100%;
+    height: 2px;
+  }
+} 
+
+/* ══════════════════════════ ÁLBUM: EL LIENZO EN EL MARCO ══════════════════════════ */
+
+.album-frame-body {
+  margin: 0;
+  background-color: #1a1512;
+  position: relative; /* Importante para el centrado */
+  min-height: 100vh;
+  overflow: hidden; /* Evita que salgan barras de scroll por la imagen gigante */
+}
+
+.back-btn-frame {
+  position: fixed;
+  top: 20px; left: 20px;
+  background: var(--dark-brown);
+  color: var(--cream);
+  font-family: var(--font-text);
+  font-size: 0.8rem;
+  padding: 10px 15px;
+  border: 2px solid var(--gold);
+  cursor: pointer;
+  z-index: 100;
+  transition: transform 0.2s;
+}
+
+.back-btn-frame:hover { transform: scale(1.05); }
+
+/* --- EL ESCENARIO --- */
+.scene-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  aspect-ratio: 16 / 9; 
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+.scene-bg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* --- EL LIENZO BLANCO (Área de Scroll) --- */
+.canvas-area {
+  position: absolute;
+  top: 18.5%; 
+  left: 25%;
+  width: 52%;
+  height: 60%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.5rem;
+  scrollbar-width: none; 
+}
+.canvas-area::-webkit-scrollbar { display: none; }
+
+/* --- EL GRID MASONRY --- */
+.masonry-grid {
+  column-count: 2; /* 2 columnas de recuerdos */
+  column-gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .masonry-grid { column-count: 1; } /* 1 columna en celulares */
+}
+
+/* --- LOS RECUERTES (Polaroids) --- */
+.media-item {
+  break-inside: avoid; /* Evita que una foto se corte a la mitad de la columna */
+  margin-bottom: 1.5rem;
+  background: #fdfaf5;
+  padding: 10px 10px 25px 10px;
+  box-shadow: 3px 5px 15px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transform: rotate(var(--rot, 0deg)); /* Rotación inyectada por JS */
+  transition: transform 0.3s, z-index 0s;
+  position: relative;
+  border: 1px solid rgba(122,92,62,0.1);
+}
+
+.media-item:hover {
+  transform: rotate(0deg) scale(1.02);
+  z-index: 10;
+  box-shadow: 5px 8px 20px rgba(0,0,0,0.25);
+}
+
+.media-thumbnail {
+  width: 100%;
+  border-radius: 2px;
+  display: block;
+}
+
+/* Tipografía Real */
+.media-caption {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--dark-brown);
+  text-align: center;
+  margin-top: 12px;
+  line-height: 1.3;
+}
+
+/* Icono de Video */
+.video-icon {
+  position: absolute;
+  top: 40%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.5rem;
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+
+/* --- LA BÓVEDA (Elementos Ocultos) --- */
+.media-item.locked .media-thumbnail {
+  filter: blur(15px) grayscale(0.8);
+  transition: filter 0.5s ease;
+}
+
+.lock-icon {
+  position: absolute;
+  top: 40%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  pointer-events: none;
+}
+
+/* --- MODALES --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 6, 3, 0.9);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vault-box {
+  background: var(--cream);
+  padding: 2.5rem;
+  text-align: center;
+  border: 2px solid var(--gold);
+  border-radius: 4px;
+}
+
+.vault-icon { font-size: 3rem; margin-bottom: 10px; }
+.vault-box h3 { font-family: var(--font-display); margin-bottom: 5px; color: var(--dark-brown); }
+.vault-box p { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; margin-bottom: 20px; }
+.vault-box input {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  text-align: center;
+  letter-spacing: 5px;
+  width: 150px;
+  padding: 10px;
+  border: none;
+  border-bottom: 2px solid var(--dark-brown);
+  background: transparent;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+/* Visor Ligthbox */
+.lightbox-content {
+  max-width: 90vw;
+  max-height: 90vh;
+  position: relative;
+  text-align: center;
+}
+
+.lightbox-content img, .lightbox-content video {
+  max-width: 100%;
+  max-height: 80vh;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  border: 5px solid white;
+}
+
+.lightbox-caption {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  color: white;
+  margin-top: 15px;
+  font-style: italic;
+}
+
+.close-lightbox {
+  position: absolute;
+  top: -40px; right: -40px;
+  background: none; border: none;
+  color: white; font-size: 2rem; cursor: pointer;
+}
+
+/* ══════════════════════════ MÚSICA (JUKEBOX) ══════════════════════════ */
+
+.music-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.music-title-area h2 { margin-bottom: 0.2rem; }
+
+/* El Vinilo Estratégico */
+#vinyl-record {
+  width: 70px; height: 70px; /* Tamaño ajustado para caber arriba */
+  border-radius: 50%;
+  background: conic-gradient(
+    #1a1008 0deg, #2c1e0f 30deg, #1a1008 60deg,
+    #2c1e0f 90deg, #1a1008 120deg, #2c1e0f 150deg,
+    #1a1008 180deg, #2c1e0f 210deg, #1a1008 240deg,
+    #2c1e0f 270deg, #1a1008 300deg, #2c1e0f 330deg, #1a1008 360deg
+  );
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 0 0 2px rgba(255,255,255,0.05);
+  flex-shrink: 0;
+}
+
+#vinyl-record.spinning { animation: spin 3s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#vinyl-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-light) 0%, var(--gold) 100%);
+}
+
+/* Botones Maestros de Playlist */
+.playlist-links {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.platform-btn {
+  flex: 1;
+  padding: 0.6rem;
+  text-align: center;
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  border: 1px solid var(--gold);
+  transition: all 0.2s;
+}
+
+.spotify-btn { background: rgba(30, 215, 96, 0.08); border-color: #1DB954; color: #1DB954; }
+.apple-btn { background: rgba(250, 36, 60, 0.08); border-color: #FA243C; color: #FA243C; }
+.platform-btn:hover { filter: brightness(1.2); }
+
+/* Tracklist Acordeón */
+.music-tracks {
+  border-top: 1px solid rgba(122,92,62,0.15);
+  text-align: left;
+}
+
+.track-wrapper {
+  border-bottom: 1px solid rgba(122,92,62,0.08);
+  overflow: hidden;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+.track-wrapper:hover { background: rgba(122,92,62,0.03); }
+.track-wrapper.active { background: rgba(201,169,110,0.08); }
+
+.track-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 0.5rem;
+}
+
+.track-num {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  min-width: 1.6rem;
+}
+
+.track-name {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  flex: 1;
+}
+
+.track-dur {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  opacity: 0.6;
+}
+
+/* Detalles (Texto oculto) */
+.track-details {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 0.5rem 0 3rem; /* Margen para alinearse con el nombre de la canción */
+  transition: all 0.4s ease-in-out;
+  overflow: hidden;
+}
+
+.track-wrapper.active .track-details {
+  max-height: 200px; /* Espacio suficiente para que el texto se despliegue */
+  opacity: 1;
+  padding-bottom: 1rem;
+}
+
+.track-reason {
+  font-family: system-ui, sans-serif; /* Rompe la 4ta pared (legibilidad) */
+  font-style: italic;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-soft);
+  margin-bottom: 0.8rem;
+}
+
+.track-actions { display: flex; gap: 1rem; }
+.track-actions a {
+  color: var(--gold);
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.track-actions a:hover { text-decoration: underline; color: var(--gold-light); }
+
+/* ══════════════════════════ CALENDARIO (TELÉFONO MÓVIL) ══════════════════════════ */
+
+.phone-mockup {
+  width: 320px;
+  height: 600px;
+  background: #111; /* Modo oscuro */
+  border-radius: 35px;
+  border: 8px solid #333; /* Borde del teléfono */
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 10px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Pantalla de Bloqueo --- */
+#phone-lockscreen {
+  height: 100%; /* Ocupa todo el alto */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  padding: 2rem;
+}
+
+#phone-lockscreen.hidden {
+  display: none !important; /* Se oculta por completo */
+}
+
+.lock-time { font-size: 3.5rem; font-weight: 300; margin-bottom: 2rem; }
+.lock-icon { font-size: 2rem; margin-bottom: 1rem; }
+.lock-prompt { font-size: 0.9rem; color: #aaa; margin-bottom: 1rem; }
+
+#phone-pin {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #555;
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+  width: 120px;
+  letter-spacing: 10px;
+  outline: none;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.3s;
+}
+
+#phone-pin:focus { border-color: #e94560; }
+
+.phone-btn {
+  background: white;
+  color: black;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+}
+
+.lock-error { color: #e94560; font-size: 0.8rem; margin-top: 1rem; opacity: 0; }
+.lock-error.show { opacity: 1; }
+
+/* --- App de Calendario --- */
+#phone-app {
+  height: 100%; /* Ocupa todo el alto */
+  background: #000;
+  display: none; /* Oculto por defecto */
+  flex-direction: column;
+}
+
+#phone-app.active {
+  display: flex !important; /* Se muestra al desbloquear */
+}
+
+.app-header {
+  background: #111;
+  padding: 1.5rem 1rem 1rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid #222;
+}
+
+.streak-badge {
+  display: inline-block;
+  background: rgba(233, 69, 96, 0.15);
+  color: #e94560;
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.cal-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.cal-nav button {
+  background: none;
+  border: none;
+  color: #e94560;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.cal-nav h3 { font-size: 1.1rem; font-weight: 500; }
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  padding: 0 10px;
+}
+
+.cal-day {
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.cal-day.empty { pointer-events: none; }
+.cal-day:hover { background: #222; }
+.cal-day.today { border: 1px solid #e94560; color: #e94560; }
+
+/* El Corazón */
+.cal-day.active { background: rgba(233, 69, 96, 0.1); color: #fff; }
+.cal-day.active::after {
+  content: '❤️';
+  position: absolute;
+  font-size: 0.8rem;
+  bottom: 2px;
+}
+
+/* ══════════════════════════ MODAL NFC (RADAR) ══════════════════════════ */
+
+.radar-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 2rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-core {
+  z-index: 10;
+  position: relative;
+  background: var(--dark-brown);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+.radar-image {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+.radar-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: rgba(201, 169, 110, 0.4); /* Tu color dorado */
+  border-radius: 50%;
+  animation: pulse-wave 2s infinite cubic-bezier(0.25, 0.8, 0.25, 1);
+  opacity: 0;
+}
+
+@keyframes pulse-wave {
+  0% { width: 60px; height: 60px; opacity: 1; border: 2px solid var(--gold); }
+  100% { width: 180px; height: 180px; opacity: 0; border: 2px solid var(--gold-light); }
+}
+
+.nfc-status {
+  font-family: system-ui, sans-serif;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  font-style: italic;
+  transition: color 0.3s;
+}
+
+.secret-content {
+  background: rgba(122,92,62,0.05);
+  padding: 2rem;
+  border-radius: 4px;
+  border-left: 3px solid var(--gold);
+  margin-top: 1.5rem;
+  animation: fadeIn 1s ease forwards;
+}
+
+/* ══════════════════════════ SCROLLBAR ══════════════════════════ */
+
+.modal::-webkit-scrollbar       { width: 4px; }
+.modal::-webkit-scrollbar-track { background: transparent; }
+.modal::-webkit-scrollbar-thumb { background: rgba(122,92,62,0.3); border-radius: 2px; }
+
+/* ══════════════════════════ RESPONSIVE ══════════════════════════ */
+
+@media (max-width: 640px) {
+  .modal, .modal.modal-wide {
+    width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    top: 0; left: 0;
+    transform: translateY(6px) scale(0.99);
+    border-radius: 0;
+    padding: 3.2rem 1.4rem 2rem;
+  }
+
+  .modal.active {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-close { top: 0.9rem; right: 1rem; font-size: 1rem; }
+
+  .album-grid { grid-template-columns: 1fr; }
+
+  #counter-full { font-size: 1rem; }
+
+  .zone { cursor: default; }
+}
+
+@media (max-width: 420px) {
+  #intro-monogram { letter-spacing: 0.25em; }
+  #letter-reveal  { padding: 0 0.5rem; }
+  .letter-line    { font-size: 0.95rem; }
+}

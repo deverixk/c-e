@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C & E</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="modal-ornament">🗝️</div>
+      <h2 class="modal-title" style="font-size: 1.8rem;">Acceso Restringido</h2>
+      <p class="modal-subtitle">Identifícate para entrar a nuestro cuarto</p>
+      
+      <input type="email" id="login-email" class="login-input" placeholder="Tu correo (ej. c@cuarto.com)" autocomplete="off" />
+      <input type="password" id="login-pass" class="login-input" placeholder="Tu contraseña" />
+      
+      <button class="phone-btn" style="margin-top: 1.5rem;" onclick="loginWithFirebase()">Abrir Puerta</button>
+      <p id="login-error" class="lock-error"></p>
+    </div>
+  </div>
+  <!-- ═══════════════════════════════════ INTRO SCREEN ═══════════════════════════════════ -->
+  <div id="intro-screen">
+    <div id="intro-particles"></div>
+    <div id="intro-content">
+      <div id="intro-monogram">C & E</div>
+      <div id="letter-reveal">
+        <p class="letter-line" style="--d:0.2s">"Quería darte algo diferente…</p>
+        <p class="letter-line" style="--d:0.9s">no flores que se marchitan,</p>
+        <p class="letter-line" style="--d:1.6s">sino un lugar que siempre sea nuestro."</p>
+      </div>
+      <button id="enter-btn" onclick="enterRoom()">
+        <span>Entrar</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ ROOM SCREEN ═══════════════════════════════════ -->
+  <div id="room-screen">
+    <div id="room-container">
+       <!--<img id="room-bg" src="C_E_room_Day.png" alt="Nuestro cuarto" />-->
+      <!--<video id="room-bg" src="c&e_room_day.mp4" autoplay loop muted playsinline></video>-->
+
+      <!-- ZONAS INVISIBLES CLICKEABLES -->
+
+      <!-- 1. Cuadro con iniciales C&E (esquina superior izquierda) -->
+      <div class="zone" id="zone-initials"
+           data-modal="modal-counter"
+           data-hint="C & E"
+           style="left:6.2%;top:19%;width:12%;height:18%;">
+      </div>
+
+      <!-- 2. Sobre / carta (repisa izquierda) -->
+      <div class="zone" id="zone-letter"
+           data-modal="modal-letters"
+           data-hint="Cartas"
+           style="left:11%;top:60%;width:8%;height:10%;">
+      </div>
+
+      <!-- 3. Libro (la chica lo sostiene / libros repisa) -->
+      <div class="zone" id="zone-book"
+           data-modal="modal-diary"
+           data-hint="Diario"
+           style="left:33%;top:55%;width:10%;height:10%;">
+      </div>
+
+      <!-- 4. Cuadro de pareja (pared central) -->
+      <div class="zone" id="zone-painting"
+           data-modal="modal-album"
+           data-hint="Álbum"
+           style="left:30%;top:27%;width:14%;height:16%;">
+      </div>
+
+      <!-- 5. Cofre (pie de cama) -->
+      <div class="zone" id="zone-chest"
+           data-modal="modal-secrets"
+           data-hint="Secretos"
+           style="left:32%;top:82%;width:11%;height:11%;">
+      </div>
+
+      <!-- 6. Tocadiscos (cómoda derecha) -->
+      <div class="zone" id="zone-vinyl"
+           data-modal="modal-music"
+           data-hint="Música"
+           style="left:76%;top:57%;width:8%;height:8%;">
+      </div>
+
+      <!-- 7. Teléfono (chico junto a ventana) -->
+      <div class="zone" id="zone-phone"
+           data-modal="modal-calendar"
+           data-hint="Calendario"
+           style="left:72%;top:47%;width:5%;height:8%;">
+      </div>
+
+      <!-- Tooltips flotantes -->
+      <div id="zone-tooltip"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ MODALES ══════════════════════════════════════ -->
+
+  <!-- OVERLAY -->
+  <div id="overlay" onclick="closeModal()"></div>
+
+  <!-- Modal 1: Contador -->
+<div class="modal" id="modal-counter">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <div class="modal-inner">
+    <p class="counter-label-title">TIEMPO JUNTOS</p>
+    <p id="counter-full"></p>
+    <p class="modal-desc">Cada día contigo es uno que no cambiaría por nada.</p>
+  </div>
+</div>
+
+  <!-- Modal 2: Cartas -->
+  <div class="modal modal-wide" id="modal-letters">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-inner" id="letters-inner">
+      <div class="modal-ornament">✉</div>
+      <h2 class="modal-title counter-label-title">Cartas para ti</h2>
+
+      <div id="letters-container">
+        
+        <div id="letters-list-view">
+          <p class="modal-desc">Aquí guardo lo que te escribo. ¿Cuál quieres leer hoy?</p>
+          <ul id="letters-list" class="pixel-list">
+            </ul>
+        </div>
+
+        <div id="single-letter-view" class="hidden">
+          <button id="back-to-letters" class="back-btn" onclick="closeLetter()">
+            ← Volver al buzón
+          </button>
+          
+          <div class="paper-sheet" id="paper-sheet-element">
+            <div id="letter-content-target" class="letter-text">
+              </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Diario -->
+  <div class="modal modal-wide" id="modal-diary">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-inner">
+      <h2 class="modal-title counter-label-title">Nuestro diario</h2>
+      <p class="modal-subtitle" style="font-family: var(--font-body); margin-bottom: 2rem;">— un espacio para los dos —</p>
+      
+      <div class="diary-book">
+        
+        <div class="diary-page left-page">
+          <div class="page-header">C</div>
+          <div class="diary-entries" id="entries-c">
+            <div class="diary-entry">
+              <span class="diary-date">17 Feb</span>
+              <p class="diary-text">Aquí irán tus notas, C. Algo que quieras recordar de hoy.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="book-spine"></div>
+
+        <div class="diary-page right-page">
+          <div class="page-header">E</div>
+          <div class="diary-entries" id="entries-e">
+            <div class="diary-entry">
+              <span class="diary-date">17 Feb</span>
+              <p class="diary-text">Y aquí irán las de ella. Un espacio propio en nuestro lugar.</p>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <div id="diary-compose-zone">
+        <textarea id="diary-textarea" placeholder="Escribe un nuevo recuerdo..."></textarea>
+        
+        <div class="diary-controls">
+          <button id="save-diary-btn" onclick="saveDiaryEntry()">Guardar en mi página</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal 4: Álbum de fotos -->
+  <div class="zone" id="zone-painting"
+           data-link="album.html" 
+           data-hint="Álbum"
+           style="left:30%;top:27%;width:14%;height:16%;">
+      </div>
+
+  <!-- Modal 5: Secretos / Cofre -->
+  <div class="modal" id="modal-secrets">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-inner" style="min-height: 400px; display: flex; flex-direction: column; justify-content: center;">
+      
+      <div id="nfc-radar-screen">
+        <h2 class="modal-title" style="margin-bottom: 2rem;">Busqueda de Amuleto</h2>
+        
+        <div class="radar-container">
+          <div class="radar-pulse"></div>
+          
+          <div class="radar-core">
+            <img src="assets/images/White.png" class="radar-image" alt="Core">
+          </div>
+        </div>
+        
+        <p class="nfc-status" id="nfc-status-text">Acerca el amuleto a la parte trasera de tu teléfono...</p>
+        <button class="phone-btn" style="margin-top: 2rem; width: auto;" onclick="startNfcScan()">Activar Escáner</button>
+      </div>
+
+      <div id="nfc-revealed-screen" class="hidden">
+        <div class="modal-ornament">♥</div>
+        <h2 class="modal-title">Mensaje Encontrado</h2>
+        
+        <div class="secret-content">
+          <p style="font-family: var(--font-body); font-size: 1.1rem; line-height: 1.6; color: var(--text-main);">
+            "Si estás leyendo esto, es porque encontraste el amuleto. Quería dejarte un espacio que solo tú pudieras abrir en el mundo real para llegar a mí en el mundo digital."
+          </p>
+          </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal 6: Música -->
+<div class="modal" id="modal-music">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-inner">
+      
+      <div class="music-header">
+        <div class="music-title-area">
+          <h2 class="modal-title">Como suena nuestro mundo</h2>
+          <p class="modal-subtitle" style="font-family: var(--font-body); opacity: 0.7;">Nuestra playlist</p>
+        </div>
+        <div id="vinyl-record">
+          <div id="vinyl-center"></div>
+        </div>
+      </div>
+
+      <div class="playlist-links">
+        <a href="#" class="platform-btn spotify-btn">Ver en Spotify</a>
+        <a href="#" class="platform-btn apple-btn">Ver en Apple Music</a>
+      </div>
+
+      <div class="music-tracks">
+        
+        <div class="track-wrapper" onclick="toggleTrack(this)">
+          <div class="track-item">
+            <span class="track-num">01</span>
+            <span class="track-name">La canción que me recuerda a ti</span>
+            <span class="track-dur">3:24</span>
+          </div>
+          <div class="track-details">
+            <p class="track-reason">"Esta es la que sonaba en el coche cuando nos dimos cuenta de que no queríamos que el viaje terminara. Me recuerda a tus nervios y a mi sonrisa."</p>
+            <div class="track-actions">
+              <a href="#" target="_blank">Escuchar en Spotify ⎘</a>
+              <a href="#" target="_blank">Escuchar en Apple ⎘</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="track-wrapper" onclick="toggleTrack(this)">
+          <div class="track-item">
+            <span class="track-num">02</span>
+            <span class="track-name">La que sonó esa noche</span>
+            <span class="track-dur">4:07</span>
+          </div>
+          <div class="track-details">
+            <p class="track-reason">"No podíamos salir por la lluvia, así que pusimos esto de fondo y convertimos la sala en nuestro propio mundo."</p>
+            <div class="track-actions">
+              <a href="#" target="_blank">Escuchar en Spotify ⎘</a>
+              <a href="#" target="_blank">Escuchar en Apple ⎘</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="track-wrapper" onclick="toggleTrack(this)">
+          <div class="track-item">
+            <span class="track-num">03</span>
+            <span class="track-name">La favorita de los dos</span>
+            <span class="track-dur">3:51</span>
+          </div>
+          <div class="track-details">
+            <p class="track-reason">"Simplemente nosotros. La cantamos mal, la bailamos peor, pero no hay canción que me haga pensar más en ti que esta."</p>
+            <div class="track-actions">
+              <a href="#" target="_blank">Escuchar en Spotify ⎘</a>
+              <a href="#" target="_blank">Escuchar en Apple ⎘</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 7: Calendario -->
+  <div class="modal modal-wide" id="modal-calendar">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    
+    <div class="phone-mockup">
+      
+      <div id="phone-lockscreen">
+        <div class="lock-time" id="lock-time">12:00</div>
+        <div class="lock-icon"></div>
+        <p class="lock-prompt">Ingresa tu código</p>
+        <input type="password" id="phone-pin" maxlength="4" placeholder="••••" />
+        <button class="phone-btn" onclick="unlockPhone()">Desbloquear</button>
+        <p class="lock-error" id="lock-error">Código incorrecto</p>
+      </div>
+
+      <div id="phone-app">
+        <div class="app-header">
+          <div class="streak-badge">
+            🔥 Racha: <span id="streak-counter">0</span> semanas
+          </div>
+        </div>
+        <div class="cal-nav">
+          <button onclick="changeMonth(-1)">‹</button>
+          <h3 id="cal-month-year">Mes Año</h3>
+          <button onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="cal-weekdays">
+          <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+  <script src="main.js"></script>
+</body>
+</html>
